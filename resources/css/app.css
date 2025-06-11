@@ -1,0 +1,15 @@
+@import 'tailwindcss';
+@source "../views";
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+@theme {
+    --font-family-sans: "Poppins", sans-serif;
+    --color-font: #34364A;
+    --color-primary: #2447F9;
+    --color-light-grey: #F6F8FD;
+    --color-light-blue: #F6F8FD;
+}

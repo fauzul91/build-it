@@ -48,7 +48,7 @@ class CategoryController extends Controller
             'icon' => $iconPath,
         ]);
 
-        return redirect()->route('category.index')->with('success', 'Category created successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category created successfully.');
     }
 
     /**
@@ -56,7 +56,7 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-
+        
     }
 
     /**
@@ -93,7 +93,7 @@ class CategoryController extends Controller
 
         $category->save();
 
-        return redirect()->route('category.index')->with('success', 'Category updated successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully.');
     }
 
     /**
@@ -104,6 +104,6 @@ class CategoryController extends Controller
         $category = Category::findOrFail($id);
         $category->delete();
 
-        return redirect()->route('category.index')->with('success', 'Category deleted successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
     }
 }

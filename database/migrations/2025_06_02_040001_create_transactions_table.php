@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('course_id');
             $table->integer('amount');
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
-            $table->string('payment_method')->default('credit_card');
+            $table->integer('course_price'); 
             $table->string('payment_url')->nullable();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('course_id')->references('id')->on('courses')->onDelete('cascade');

@@ -25,15 +25,22 @@
                                 <p class="text-sm text-gray-600">Rp{{ number_format($course->price, 0, ',', '.') }}</p>
                             </div>
                             <div class="px-4 py-4 mb-4 space-y-2">
-                                <a href="{{ route('course.detail', $course->slug) }}"
-                                    class="rounded-full py-3 px-5 bg-primary hover:opacity-90 transition-all duration-300">
-                                    <span class="font-semibold text-white">Selengkapnya</span>
-                                </a>
+                                @if (in_array($course->id, $isPurchased))
+                                    <button class="rounded-full py-3 px-5 bg-black" disabled>
+                                        <span class="font-semibold text-white">Sudah Bergabung</span>
+                                    </button>
+                                @else
+                                    <a href="{{ route('course.detail', $course->slug) }}"
+                                        class="rounded-full py-3 px-5 bg-primary hover:opacity-90 transition-all duration-300">
+                                        <span class="font-semibold text-white">Selengkapnya</span>
+                                    </a>
+                                @endif
                             </div>
                         </div>
                     @empty
                         <div class="col-span-full flex flex-col items-center justify-center py-12">
-                            <img src="{{ asset('assets/images/icons/crying-face.svg') }}" alt="Sorry Icon" class="w-15 h-auto mb-8">
+                            <img src="{{ asset('assets/images/icons/crying-face.svg') }}" alt="Sorry Icon"
+                                class="w-15 h-auto mb-8">
                             <h3 class="text-xl font-semibold text-gray-600 mb-1">Belum ada kelas tersedia</h3>
                             <p class="text-gray-500 text-center max-w-md mb-4">Kami sedang mempersiapkan kelas terbaik untuk
                                 Anda.<br>Silakan cek kembali nanti.</p>

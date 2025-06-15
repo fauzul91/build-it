@@ -43,7 +43,7 @@ class CourseVideoController extends Controller
 
         CourseVideo::create($validated);
 
-        return redirect()->route('course.show', $courseId)->with('success', 'Video berhasil ditambahkan.');
+        return redirect()->route('courses.show', $courseId)->with('success', 'Video berhasil ditambahkan.');
     }
 
     /**
@@ -81,7 +81,7 @@ class CourseVideoController extends Controller
 
         $video->update($validated);
 
-        return redirect()->route('course.show', $courseId)->with('success', 'Video berhasil diperbarui.');
+        return redirect()->route('courses.show', $courseId)->with('success', 'Video berhasil diperbarui.');
     }
 
     /**

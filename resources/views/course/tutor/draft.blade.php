@@ -7,8 +7,8 @@
 @section('content')
     <div class="flex items-center justify-between mb-8">
         <div class="flex flex-col">
-            <h1 class="text-2xl font-bold mb-1.5">Manage Courses</h1>
-            <p class="opacity-70">Atur seluruh kursus aktif di platform.</p>
+            <h1 class="text-2xl font-bold mb-1.5">Draft Courses</h1>
+            <p class="opacity-70">Buat kursus kamu di platform.</p>
         </div>
         <a href="{{ route('courses.create') }}"
             class="flex items-center px-6 py-3 text-white bg-primary rounded-full hover:opacity-90 transition-colors">
@@ -33,7 +33,6 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-
                     <form method="POST" action="{{ route('course.publish', $course->id) }}">
                         @csrf
                         <button type="submit"
@@ -53,7 +52,7 @@
                             <span class="font-medium">Delete</span>
                         </button>
                     </form>
-                    <a href="{{ route('course.show', $course->id) }}"
+                    <a href="{{ route('courses.show', $course->id) }}"
                         class="flex items-center px-6 py-3 text-white bg-font rounded-full hover:opacity-90 transition-colors">
                         <span class="font-medium">Detail</span>
                     </a>

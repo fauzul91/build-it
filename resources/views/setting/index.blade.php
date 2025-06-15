@@ -5,20 +5,20 @@
 @endsection
 
 @section('content')
-    <div class="container mx-auto p-8">
+    <div class="container mx-auto">
         <h1 class="text-2xl font-bold mb-1.5">Settings</h1>
         <p class="text-lg text-gray-500 mb-8">Atur profil dan keamanan akun mu</p>
 
-        @if(session('success'))
+        @if (session('success'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6">
                 {{ session('success') }}
             </div>
         @endif
 
-        @if($errors->any())
+        @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6">
                 <ul>
-                    @foreach($errors->all() as $error)
+                    @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
@@ -30,19 +30,20 @@
             <div class="bg-white rounded-xl shadow-sm p-8">
                 <h2 class="text-xl font-semibold mb-4">My Profile</h2>
                 <div class="flex items-center gap-6 mb-4">
-                    <img src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('assets/images/icons/user.svg') }}" 
-                         alt="Profile photo"
-                         class="w-24 h-24 rounded-full border-gray-300 object-cover">
+                    <img id="photo-preview"
+                        src="{{ $user->photo ? asset('storage/' . $user->photo) : asset('assets/images/icons/user.svg') }}"
+                        class="w-24 h-24 rounded-full object-cover" alt="Profile">
                     <div>
-                        <button type="button" onclick="document.getElementById('photo').click()" 
-                                class="px-4 py-2 bg-primary text-white rounded-full">
+                        <button type="button" onclick="document.getElementById('photo').click()"
+                            class="px-4 py-2 bg-primary hover:opacity-90 cursor-pointer text-white rounded-full">
                             Upload Profile
                         </button>
                         <input type="file" id="photo" name="photo" class="hidden" form="profileForm">
                     </div>
                 </div>
 
-                <form id="profileForm" action="{{ route('settings.profile.update') }}" method="POST" enctype="multipart/form-data">
+                <form id="profileForm" action="{{ route('settings.profile.update') }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700">Nama</label>
@@ -59,7 +60,8 @@
                         <input type="text" id="phone" name="phone" value="{{ old('phone', $user->phone) }}"
                             class="w-full p-3 mt-2 border border-gray-300 rounded-full">
                     </div>
-                    <button type="submit" class="w-full py-3 bg-primary text-white rounded-full mt-4 hover:bg-primary-dark transition-colors">
+                    <button type="submit"
+                        class="w-full py-3 bg-primary text-white rounded-full mt-4 hover:bg-primary-dark transition-colors">
                         Save Profile
                     </button>
                 </form>
@@ -86,7 +88,8 @@
                         <input type="password" id="new_password_confirmation" name="new_password_confirmation"
                             class="w-full p-3 mt-2 border border-gray-300 rounded-full" required>
                     </div>
-                    <button type="submit" class="w-full py-3 bg-primary text-white rounded-full mt-4 hover:bg-primary-dark transition-colors">
+                    <button type="submit"
+                        class="w-full py-3 bg-primary text-white rounded-full mt-4 hover:bg-primary-dark transition-colors">
                         Change Password
                     </button>
                 </form>
@@ -104,9 +107,9 @@
                     </svg>
                     <p class="text-xl">Mengalami Kendala?</p>
                 </div>
-                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20mengalami%20kendala%20di%20akun%20saya" 
-                   target="_blank"
-                   class="bg-white text-primary py-2 px-6 rounded-full hover:opacity-80 transition-opacity">
+                <a href="https://wa.me/6281234567890?text=Halo,%20saya%20mengalami%20kendala%20di%20akun%20saya"
+                    target="_blank"
+                    class="bg-white text-primary py-2 px-6 rounded-full hover:opacity-80 transition-opacity">
                     Hubungi Kami Via WhatsApp
                 </a>
             </div>
@@ -116,11 +119,11 @@
     <script>
         document.getElementById('photo').addEventListener('change', function(event) {
             const file = event.target.files[0];
-            if (file) {
+            if (file && file.type.startsWith('image/')) {
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    document.querySelector('.rounded-full.object-cover').src = e.target.result;
-                }
+                    document.getElementById('photo-preview').src = e.target.result;
+                };
                 reader.readAsDataURL(file);
             }
         });

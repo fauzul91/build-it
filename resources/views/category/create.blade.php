@@ -33,7 +33,8 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="w-1/3 py-3 bg-primary text-white rounded-full mt-4">Create Category</button>
+                    <button type="submit" class="w-1/3 py-3 bg-primary hover:opacity-90 cursor-pointer text-white rounded-full mt-4">Create Category</button>
+                    <a href="{{ route('categories.index') }}" class="ml-4 w-1/3 py-3 bg-white text-font hover:shadow-md rounded-full mt-4 text-center inline-block">Cancel</a>
                 </form>
             </div>
         </div>

@@ -9,9 +9,6 @@ use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function pendingCourses(Request $request)
     {
         $verificationCourses = Course::where('status', 'pending')->paginate(10);
@@ -32,8 +29,6 @@ class CourseController extends Controller
             ->paginate(10);
         return view('course.tutor.draft', compact('tutorDraftCourses'));
     }
-
-    // Status Courses for each tutor
     public function tutorStatusCourses()
     {
         $tutorId = auth()->id();
@@ -42,10 +37,6 @@ class CourseController extends Controller
             ->paginate(10);
         return view('course.tutor.status', compact('tutorStatusCourses'));
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $categories = Category::all();
@@ -87,13 +78,20 @@ class CourseController extends Controller
 
         Course::create($data);
 
-        return redirect()->route('courses.index')->with('success', 'Course created successfully.');
+        return redirect()->route('courses.index')->with('success', 'Course berhasil dibuat.');
     }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
+    {
+        $categories = Category::all();
+        $course = Course::with('videos')->findOrFail($id);
+        return view('course.show', compact('course', 'categories'));
+    }
+
+    public function adminShow(string $id)
     {
         $categories = Category::all();
         $course = Course::with('videos')->findOrFail($id);
@@ -147,7 +145,11 @@ class CourseController extends Controller
 
         $course->update($data);
 
-        return redirect()->route('courses.index')->with('success', 'Course updated successfully.');
+        if (auth()->user()->hasRole('tutor') && $course->status === 'rejected') {
+            return redirect()->route('course.tutor.status', ['status' => 'rejected'])->with('success', 'Course berhasil diperbarui. Silakan ajukan ulang.');
+        }
+
+        return redirect()->route('courses.index')->with('success', 'Course berhasil diupdate.');
     }
 
     /**
@@ -158,7 +160,7 @@ class CourseController extends Controller
         $course = Course::findOrFail($id);
         $course->delete();
 
-        return redirect()->route('courses.index')->with('success', 'Course deleted successfully.');
+        return redirect()->route('courses.index')->with('success', 'Course berhasil dihapus.');
     }
 
     public function approve($id)
@@ -167,16 +169,21 @@ class CourseController extends Controller
         $course->status = 'approved';
         $course->save();
 
-        return redirect()->route('courses.index')->with('success', 'Course approved successfully.');
+        return redirect()->route('course.active.index')->with('success', 'Course berhasil disetujui.');
     }
 
-    public function reject($id)
+    public function reject(Request $request, $id)
     {
+        $request->validate([
+            'rejection_reason' => 'required|string|max:1000',
+        ]);
+
         $course = Course::findOrFail($id);
         $course->status = 'rejected';
+        $course->rejection_reason = $request->rejection_reason;
         $course->save();
 
-        return redirect()->route('courses.index')->with('success', 'Course rejected successfully.');
+        return redirect()->route('course.active.index')->with('success', 'Course berhasil ditolak.');
     }
 
     public function publish($id)
@@ -185,12 +192,31 @@ class CourseController extends Controller
         $course->status = 'pending';
         $course->save();
 
-        return redirect()->route('course.tutor.status')->with('success', 'Course published successfully.');
+        return redirect()->route('course.tutor.status')->with('success', 'Course berhasil dipublish.');
     }
 
     public function preview($courseId)
     {
         $course = Course::with('videos')->findOrFail($courseId);
         return view('course.preview', compact('course'));
+    }
+    public function adminPreview($courseId)
+    {
+        $course = Course::with('videos')->findOrFail($courseId);
+        return view('course.preview', compact('course'));
+    }
+    public function resubmit($id)
+    {
+        $course = Course::findOrFail($id);
+
+        if (auth()->id() === $course->tutor_id && $course->status === 'rejected') {
+            $course->status = 'pending';
+            $course->rejection_reason = null;
+            $course->save();
+
+            return redirect()->back()->with('success', 'Course berhasil diajukan ulang.');
+        }
+
+        return redirect()->back()->with('error', 'Course tidak bisa diajukan ulang.');
     }
 }

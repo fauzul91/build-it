@@ -1,7 +1,7 @@
 @extends('layouts.dashboard')
 
 @section('content')
-    <div class="container mx-auto p-8">
+    <div class="container mx-auto">
         <h1 class="text-2xl font-bold mb-1.5">Edit Category</h1>
         <p class="text-lg text-gray-500 mb-8">Atur seluruh kategori kelas di platform.</p>
 
@@ -39,7 +39,7 @@
                         @enderror
                     </div>
 
-                    <button type="submit" class="w-1/3 py-3 bg-primary text-white rounded-full mt-4">Update Category</button>
+                    <button type="submit" class="w-1/3 py-3 bg-primary hover:opacity-90 cursor-pointer text-white rounded-full mt-4">Update Category</button>
                     <a href="{{ route('categories.index') }}" class="ml-4 w-1/3 py-3 bg-white text-font hover:shadow-md rounded-full mt-4 text-center inline-block">Cancel</a>
                 </form>
             </div>

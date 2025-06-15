@@ -7,11 +7,19 @@
 @section('content')
     <div class="flex items-center justify-between mb-8">
         <div class="flex flex-col">
-            <h1 class="text-2xl font-bold mb-1.5">Manage Courses</h1>
-            <p class="opacity-70">Atur seluruh kursus aktif di platform.</p>
+            <h1 class="text-2xl font-bold mb-1.5">Active Courses</h1>
+            <p class="opacity-70">Lihat seluruh kursus aktif di platform.</p>
         </div>
     </div>
 
+    @if (session('success'))
+        @foreach ((array) session('success') as $message)
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-6 mb-2">
+                {{ $message }}
+            </div>
+        @endforeach
+    @endif
+    
     <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm">
         @forelse ($activeCourses as $course)
             <div class="flex items-center w-full justify-between p-8 gap-4 border-b border-gray-200">
@@ -29,22 +37,7 @@
                     </div>
                 </div>
                 <div class="flex items-center gap-4">
-
-                    <form method="POST" action="{{ route('course.approve', $course->id) }}">
-                        @csrf
-                        <button type="submit"
-                            class="flex items-center px-6 py-3 text-white bg-primary rounded-full hover:opacity-90 transition-colors">
-                            <span class="font-medium">Approve</span>
-                        </button>
-                    </form>
-                    <form method="POST" action="{{ route('course.reject', $course->id) }}">
-                        @csrf
-                        <button type="submit"
-                            class="flex items-center px-6 py-3 text-white bg-[#FF0000] rounded-full hover:opacity-90 transition-colors">
-                            <span class="font-medium">Reject</span>
-                        </button>
-                    </form>
-                    <a href="{{ route('course.show', $course->id) }}"
+                    <a href="{{ route('admin.course.show', $course->id) }}"
                         class="flex items-center px-6 py-3 text-white bg-font rounded-full hover:opacity-90 transition-colors">
                         <span class="font-medium">Detail</span>
                     </a>

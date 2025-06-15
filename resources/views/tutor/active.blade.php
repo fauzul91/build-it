@@ -11,6 +11,15 @@
             <p class="opacity-70">Lihat tutor aktif di platform.</p>
         </div>
     </div>
+
+    @if (session('success'))
+        @foreach ((array) session('success') as $message)
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mt-6 mb-2">
+                {{ $message }}
+            </div>
+        @endforeach
+    @endif
+    
     <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm mt-8">
         @forelse ($tutors as $tutor)
             <div

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Course;
+use App\Models\Transaction;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -10,18 +11,25 @@ class HomeController extends Controller
     public function index()
     {
         return view('landing.home');
-    }    
+    }
     public function course()
     {
         $courses = Course::all();
-        return view('landing.course', compact('courses'));
+        $userId = auth()->id();
+
+        $isPurchased = Transaction::where('user_id', $userId)
+            ->where('status', 'completed')
+            ->pluck('course_id')
+            ->toArray();
+        return view('landing.course', compact('courses', 'isPurchased'));
     }
-        public function jadiTutor()
+    public function jadiTutor()
     {
         return view('landing.tutor');
     }
-    public function detail()
+    public function detail($slug)
     {
-        return view('landing.detail');
+        $course = Course::with('tutor', 'videos')->where('slug', $slug)->first(); 
+        return view('landing.detail', compact('course'));
     }
 }

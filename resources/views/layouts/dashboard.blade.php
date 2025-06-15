@@ -99,7 +99,7 @@
                             <!-- Dropdown untuk Tutor -->
                             <li x-data="{ open: true }" class="relative">
                                 <button @click="open = !open"
-                                    class="w-full flex items-center cursor-pointer justify-between px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
+                                    class="w-full flex items-center cursor-pointer justify-between px-3 py-2 gap-6 rounded-lg text-font hover:text-primary transition-colors">
                                     <div class="flex items-center gap-3">
                                         <i class="fas fa-chalkboard-teacher w-5 text-center text-font"></i>
                                         <span class="font-medium">Tutors</span>

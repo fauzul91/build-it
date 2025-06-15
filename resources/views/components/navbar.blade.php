@@ -52,6 +52,10 @@
                                             class="block px-4 py-4 hover:bg-gray-100">Profile</a>
                                     </li>
                                     <li>
+                                        <a href="{{ route('profile') }}"
+                                            class="block px-4 py-4 hover:bg-gray-100">Profile</a>
+                                    </li>
+                                    <li>
                                         <a href="{{ route('logout') }}" class="block px-4 py-4 hover:bg-gray-100"
                                             onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                                             Logout

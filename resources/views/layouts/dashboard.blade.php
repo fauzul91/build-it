@@ -160,11 +160,7 @@
         <main class="flex-1 overflow-y-auto bg-[#FAFBFF]">
             <div class="px-8 py-6 flex justify-between items-center sticky top-0 z-10 bg-white">
                 <div class="w-1/2">
-                    <div class="relative">
-                        <input type="text" placeholder="@yield('placeholder')"
-                            class="w-full pl-10 pr-4 py-2 rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-primary transition" />
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>
+                    @yield('head-content')
                 </div>
                 <div class="flex items-center gap-4">
                     <div class="flex items-center space-x-2">

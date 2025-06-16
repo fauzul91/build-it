@@ -53,8 +53,11 @@ class CourseBenefitController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $courseId, string $benefitId)
     {
+        $course = Course::findOrFail($courseId);
+        $benefit = CourseBenefit::findOrFail($benefitId);
+
         return view('course_benefit.edit', compact('course', 'benefit'));
     }
 

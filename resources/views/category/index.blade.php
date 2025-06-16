@@ -24,6 +24,12 @@
         @endforeach
     @endif
 
+    @if (session('error'))
+        <div class="bg-red-100 text-red-700 px-4 py-3 rounded-xl mt-6 mb-2">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm mt-8">
         @foreach ($categories as $category)
             <div class="flex items-center w-full justify-between p-8 gap-4">
@@ -39,12 +45,39 @@
                         class="flex items-center px-6 py-3 text-white bg-primary rounded-full hover:opacity-90 transition-colors">
                         <span class="font-medium">Edit</span>
                     </a>
-                    <a href="#"
-                        class="flex items-center px-6 py-3 text-white bg-[#FF0000] rounded-full hover:opacity-90 transition-colors">
-                        <span class="font-medium">Delete</span>
-                    </a>
+                    <form action="{{ route('categories.destroy', $category->id) }}" method="POST"
+                        class="delete-category-form">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="flex items-center px-6 py-3 text-white bg-[#FF0000] rounded-full hover:opacity-90 transition-colors">
+                            <span class="font-medium">Delete</span>
+                        </button>
+                    </form>
                 </div>
             </div>
         @endforeach
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.delete-category-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // stop submit
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "Category will be deleted permanently!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

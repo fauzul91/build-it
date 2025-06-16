@@ -35,13 +35,13 @@
                 Login
             </button>
 
-            <h3 class="text-center font-light text-[0.75rem] mb-4 text-gray-700">- atau masuk menggunakan -</h3>
+            {{-- <h3 class="text-center font-light text-[0.75rem] mb-4 text-gray-700">- atau masuk menggunakan -</h3>
 
             <a href="{{ route('google-redirect', ['role' => 'student']) }}"
                 class="w-full flex items-center mb-4 justify-center gap-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 font-semibold py-3 px-6 rounded-xl transition duration-200 shadow-md">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
                 <span>Login dengan Google</span>
-            </a>
+            </a> --}}
 
             <a href="{{ route('register') }}" class="block text-center text-sm">Belum punya akun? <span
                     class="font-semibold cursor-pointer text-primary">Daftar Sekarang!</span></a>

@@ -56,7 +56,7 @@ class CategoryController extends Controller
      */
     public function show(string $id)
     {
-        
+
     }
 
     /**
@@ -101,9 +101,14 @@ class CategoryController extends Controller
      */
     public function destroy(string $id)
     {
-        $category = Category::findOrFail($id);
+        $category = Category::withCount('courses')->findOrFail($id);
+
+        if ($category->courses_count > 0) {
+            return redirect()->route('categories.index')->with('error', 'Category tidak bisa dihapus karena terkait dengan courses.');
+        }
+
         $category->delete();
 
-        return redirect()->route('categories.index')->with('success', 'Category deleted successfully.');
+        return redirect()->route('categories.index')->with('success', 'Category berhasil dihapus.');
     }
 }

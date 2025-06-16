@@ -3,7 +3,7 @@
 @section('content')
     <div class="w-full max-w-md rounded-2xl shadow-md px-12 py-12 bg-white">
         <h1 class="text-[1.75rem] font-extrabold text-center text-gray-700 mb-2">Halo, Selamat Datang</h1>
-        <h3 class="text-center font-medium text-gray-700 mb-8">Daftar sekarang dan nikmati produk kami</h3>
+        <h3 class="text-center font-medium text-gray-700 mb-8">Daftar sekarang dan bangun masa depanmu.</h3>
         @if ($errors->any())
             <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
                 <ul class="list-disc pl-5">
@@ -48,13 +48,13 @@
                 Register
             </button>
 
-            <h3 class="text-center font-light text-[0.75rem] mb-4 text-gray-700">- atau daftar menggunakan -</h3>
+            {{-- <h3 class="text-center font-light text-[0.75rem] mb-4 text-gray-700">- atau daftar menggunakan -</h3>
 
             <a href="{{ route('google-redirect', ['role' => 'tutor']) }}"
                 class="w-full flex items-center mb-4 justify-center gap-2 bg-white text-gray-700 border border-gray-300 hover:bg-gray-100 font-semibold py-3 px-6 rounded-xl transition duration-200 shadow-md">
                 <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google" class="w-5 h-5">
                 <span>Daftar dengan Google</span>
-            </a>
+            </a> --}}
 
             <a href="{{ route('login') }}" class="block text-center text-sm">Sudah memiliki akun? <span
                     class="font-semibold cursor-pointer text-primary">Masuk Sekarang!</span></a>

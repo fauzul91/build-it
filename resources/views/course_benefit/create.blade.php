@@ -2,8 +2,8 @@
 
 @section('content')
     <div class="container mx-auto">
-        <h1 class="text-2xl font-bold mb-1.5">Add Course Video to "{{ $course->name }}"</h1>
-        <p class="text-md text-gray-500 mb-8">Tambah konten video baru untuk kursus.</p>        
+        <h1 class="text-2xl font-bold mb-1.5">Add Course Benefit to "{{ $course->name }}"</h1>
+        <p class="text-md text-gray-500 mb-8">Tambah benefit untuk kursus.</p>        
 
         <div class="grid grid-cols-1 w-2/3 gap-8">
             <div class="bg-white rounded-xl shadow-sm p-8">

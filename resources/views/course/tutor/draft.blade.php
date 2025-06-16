@@ -59,7 +59,7 @@
                         class="flex items-center px-6 py-3 text-white bg-primary rounded-full hover:opacity-90 transition-colors">
                         <span class="font-medium">Edit</span>
                     </a>
-                    <form method="POST" action="{{ route('courses.destroy', $course->id) }}">
+                    <form method="POST" action="{{ route('courses.destroy', $course->id) }}" class="form-delete">
                         @csrf
                         @method('DELETE')
                         <button type="submit"
@@ -77,4 +77,27 @@
             <p class="p-8">Tidak ada kursus yang ditampilkan. Silakan buat kursus baru.</p>
         @endforelse
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.form-delete').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // Cegah submit default
+
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    text: "Kursus akan dihapus dari platform!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

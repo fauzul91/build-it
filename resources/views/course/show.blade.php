@@ -9,9 +9,9 @@
         {{-- Header & Preview Button --}}
         <div class="flex items-center justify-between mb-4">
             <h1 class="text-3xl font-bold mb-4">{{ $course->name }}</h1>
-            <a href="{{ auth()->user()->hasRole('admin') 
-                        ? route('admin.course.preview', ['course' => $course->id])
-                        : route('tutor.course.preview', ['course' => $course->id]) }}"
+            <a href="{{ auth()->user()->hasRole('admin')
+                ? route('admin.course.preview', ['course' => $course->id])
+                : route('tutor.course.preview', ['course' => $course->id]) }}"
                 class="px-6 py-3 bg-white text-font rounded-full hover:shadow-md transition">
                 <span class="font-medium">Preview</span>
             </a>
@@ -29,7 +29,7 @@
         <div class="flex gap-8 mb-4">
             <div class="bg-white rounded-xl shadow-sm p-6 w-3/5 h-[360px] flex flex-col justify-center gap-5">
                 <img src="{{ asset('storage/' . $course->thumbnail) }}" alt="{{ $course->name }}"
-                    class="w-full h-40 rounded-xl border object-cover mb-4">
+                    class="w-auto h-50 rounded-xl object-cover mb-4">
                 <div class="flex gap-4">
                     <div class="flex-1 p-4 rounded-xl shadow-sm bg-gray-50">
                         <h2 class="text-sm font-semibold text-gray-700">Course Category</h2>
@@ -60,16 +60,15 @@
                     <div class="flex justify-between items-start bg-gray-50 rounded-lg p-3 mb-3 hover:shadow transition">
                         <p class="text-sm text-gray-700 flex-1">{{ $benefit->benefit }}</p>
                         @role('tutor')
-                            @if ($course->status === 'draft')
+                            @if (in_array($course->status, ['draft', 'rejected']))
                                 <div class="flex flex-col gap-1 ml-4 shrink-0">
                                     <a href="{{ route('courses.benefits.edit', [$course->id, $benefit->id]) }}"
                                         class="text-xs text-blue-600 hover:underline">Edit</a>
                                     <form action="{{ route('courses.benefits.destroy', [$course->id, $benefit->id]) }}"
-                                        method="POST" onsubmit="return confirm('Yakin ingin menghapus benefit ini?')">
+                                        method="POST" class="form-delete">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit"
-                                            class="text-xs text-red-600 hover:underline">Hapus</button>
+                                        <button type="submit" class="text-xs text-red-600 hover:underline">Hapus</button>
                                     </form>
                                 </div>
                             @endif
@@ -102,8 +101,8 @@
                         <div class="flex items-center gap-2">
                             <a href="{{ route('courses.videos.edit', [$course->id, $video->id]) }}"
                                 class="px-6 py-3 rounded-full bg-primary text-white hover:opacity-90">Edit</a>
-                            <form action="{{ route('courses.videos.destroy', [$course->id, $video->id]) }}"
-                                method="POST" onsubmit="return confirm('Yakin ingin menghapus video ini?')">
+                            <form action="{{ route('courses.videos.destroy', [$course->id, $video->id]) }}" method="POST"
+                                class="form-delete">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit"
@@ -117,4 +116,26 @@
             @endforelse
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.querySelectorAll('.form-delete').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault(); // Mencegah submit langsung
+
+                Swal.fire({
+                    title: 'Yakin ingin menghapus?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

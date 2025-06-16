@@ -5,6 +5,19 @@
 @endsection
 
 @section('content')
+    @if (!$verif || $verif->status !== 'approved')
+        <div class="bg-yellow-100 text-yellow-800 border border-yellow-300 px-4 py-3 rounded mb-6">
+            @if (!$verif)
+                Anda belum mengajukan verifikasi tutor.
+                <a href="{{ route('tutor.verif.form') }}" class="text-blue-600 underline">Ajukan sekarang.</a>
+            @elseif ($verif->status === 'pending')
+                Pengajuan verifikasi Anda sedang diproses. Mohon tunggu persetujuan admin.
+            @elseif ($verif->status === 'rejected')
+                Pengajuan verifikasi ditolak: <strong>{{ $verif->rejection_reason }}</strong>.
+                <a href="{{ route('tutor.verif') }}" class="text-blue-600 underline">Ajukan ulang.</a>
+            @endif
+        </div>
+    @endif
     <div class="mb-10">
         <h1 class="text-2xl font-bold mb-2 tracking-tight">Dashboard Overview</h1>
         <p class="opacity-80">Ringkasan Statistik Aktivitas di BuildIt</p>
@@ -45,21 +58,20 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($recentTransactions as $trx)
+                @foreach ($recentTransactions as $trx)
                     <tr class="border-b border-gray-100 hover:bg-gray-50 transition-colors duration-200">
                         <td class="py-3.5 pr-6">{{ $trx->created_at->format('d M Y') }}</td>
                         <td class="py-3.5 pr-6">{{ $trx->user->name ?? '-' }}</td>
                         <td class="py-3.5 pr-6">{{ $trx->course->name ?? '-' }}</td>
                         <td class="py-3.5 pr-6">Rp{{ number_format($trx->platform_fee) }}</td>
                         <td class="py-3.5">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
-                                @if($trx->status === 'completed')
-                                    bg-green-100 text-green-700
+                            <span
+                                class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold
+                                @if ($trx->status === 'completed') bg-green-100 text-green-700
                                 @elseif($trx->status === 'pending')
                                     bg-yellow-100 text-yellow-700
                                 @else 
-                                    bg-red-100 text-red-700
-                                @endif">
+                                    bg-red-100 text-red-700 @endif">
                                 {{ ucfirst($trx->status) }}
                             </span>
                         </td>
@@ -95,7 +107,9 @@
                 responsive: true,
                 maintainAspectRatio: false,
                 plugins: {
-                    legend: { display: false },
+                    legend: {
+                        display: false
+                    },
                     tooltip: {
                         backgroundColor: '#1f2937',
                         titleColor: '#ffffff',
@@ -133,7 +147,9 @@
                         grid: {
                             display: false
                         },
-                        ticks: { color: '#6b7280' }
+                        ticks: {
+                            color: '#6b7280'
+                        }
                     }
                 }
             }

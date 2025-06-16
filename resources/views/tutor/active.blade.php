@@ -1,7 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('placeholder')
-    Cari tutor aktif terkini...
+@section('head-content')
+    <div class="relative mb-6">
+        <input type="text" id="search-tutor" placeholder="Cari nama tutor..."
+            class="w-full pl-10 pr-4 py-2 rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-primary transition" />
+        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+    </div>
 @endsection
 
 @section('content')
@@ -20,7 +24,7 @@
         @endforeach
     @endif
     
-    <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm mt-8">
+    <div id="tutor-list" class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm mt-8">
         @forelse ($tutors as $tutor)
             <div
                 class="flex flex-col md:flex-row items-start md:items-center w-full justify-between p-6 gap-6 border-b border-gray-200 last:border-b-0">
@@ -104,4 +108,5 @@
             <p class="p-8">Belum ada tutor yang aktif.</p>
         @endforelse
     </div>
+    <script src="{{ asset('js\admin-tutor-active-search.js') }}"></script>
 @endsection

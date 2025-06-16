@@ -1,9 +1,5 @@
 @extends('layouts.dashboard')
 
-@section('placeholder')
-    Cari course terkini...
-@endsection
-
 @section('content')
     <div class="flex items-center justify-between mb-8">
         <div class="flex flex-col">
@@ -12,7 +8,7 @@
         </div>
     </div>
 
-    <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm">
+    <div id="course-list" class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm">
         @forelse ($verificationCourses as $course)
             <div class="flex items-center w-full justify-between p-8 gap-4 border-b border-gray-200">
                 <div class="flex items-center gap-4">

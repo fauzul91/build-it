@@ -68,6 +68,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/transactions', [TransactionController::class, 'adminTransaction'])->name('admin.transaction');
     Route::get('/transactions/{id}', [TransactionController::class, 'adminTransactionShow'])->name('admin.transaction.show');
     Route::get('/tutor-aktif', [TutorController::class, 'activeTutors'])->name('tutor.active');
+    Route::get('/tutor-aktif/search', [TutorController::class, 'searchActiveTutor'])->name('search.tutor.active');
     Route::get('/tutor-pending', [TutorController::class, 'pendingTutors'])->name('tutor.pending');
     Route::post('/tutor/approve/{id}', [TutorController::class, 'approve'])->name('tutor.approve');
     Route::post('/tutor/reject/{id}', [TutorController::class, 'reject'])->name('tutor.reject');
@@ -77,5 +78,7 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::post('/course/{id}/approve', [CourseController::class, 'approve'])->name('course.approve');
     Route::post('/course/{id}/reject', [CourseController::class, 'reject'])->name('course.reject');
     Route::get('/courses/{course}/preview', [CourseController::class, 'adminPreview'])->name('admin.course.preview');
+    Route::get('/course-active/search', [CourseController::class, 'searchActiveCourse'])->name('admin.course.search');
+    Route::get('/categories/search', [CategoryController::class, 'search'])->name('categories.search');
     Route::resource('categories', CategoryController::class);
 });

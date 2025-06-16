@@ -1,7 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('placeholder')
-    Cari course terkini...
+@section('head-content')
+    <div class="relative mb-6">
+        <input type="text" id="search-course" placeholder="Cari nama course..."
+            class="w-full pl-10 pr-4 py-2 rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-primary transition" />
+        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+    </div>
 @endsection
 
 @section('content')
@@ -19,8 +23,8 @@
             </div>
         @endforeach
     @endif
-    
-    <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm">
+
+    <div id="course-list" class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm">
         @forelse ($activeCourses as $course)
             <div class="flex items-center w-full justify-between p-8 gap-4 border-b border-gray-200">
                 <div class="flex items-center gap-4">
@@ -47,4 +51,5 @@
             <p class="p-8">Belum ada course yang dipublish.</p>
         @endforelse
     </div>
+    <script src="{{ asset('js/admin-course-active-search.js') }}"></script>
 @endsection

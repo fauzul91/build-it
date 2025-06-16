@@ -18,13 +18,13 @@ class TutorController extends Controller
     }
     public function activeTutors(Request $request)
     {
-        $tutors = TutorVerif::where('status', 'approved')->get();    
+        $tutors = TutorVerif::where('status', 'approved')->get();
 
         return view('tutor.active', compact('tutors'));
     }
     public function pendingTutors(Request $request)
     {
-        $tutors = TutorVerif::where('status', 'pending')->get();    
+        $tutors = TutorVerif::where('status', 'pending')->get();
 
         return view('tutor.pending', compact('tutors'));
     }
@@ -69,5 +69,18 @@ class TutorController extends Controller
         );
 
         return redirect()->route('tutor.dashboard')->with('success', 'Verifikasi tutor berhasil, tunggu konfirmasi admin.');
+    }
+    public function searchActiveTutor(Request $request)
+    {
+        $query = $request->query('q');
+
+        $tutors = TutorVerif::with('user')
+            ->where('status', 'approved')
+            ->whereHas('user', function ($q) use ($query) {
+                $q->where('name', 'like', '%' . $query . '%');
+            })
+            ->get();
+
+        return response()->json($tutors);
     }
 }

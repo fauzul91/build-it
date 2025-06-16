@@ -111,4 +111,11 @@ class CategoryController extends Controller
 
         return redirect()->route('categories.index')->with('success', 'Category berhasil dihapus.');
     }
+    public function search(Request $request)
+    {
+        $query = $request->query('q');
+        $categories = Category::where('name', 'like', '%' . $query . '%')->get();
+
+        return response()->json($categories);
+    }
 }

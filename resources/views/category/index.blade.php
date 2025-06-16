@@ -1,7 +1,11 @@
 @extends('layouts.dashboard')
 
-@section('placeholder')
-    Cari kategori terkini...
+@section('head-content')
+    <div class="relative mb-6">
+        <input type="text" id="search-category" placeholder="Cari nama kategori..."
+            class="w-full pl-10 pr-4 py-2 rounded-full bg-white border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-primary transition" />
+        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+    </div>
 @endsection
 
 @section('content')
@@ -30,11 +34,12 @@
         </div>
     @endif
 
-    <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm mt-8">
+    {{-- Daftar kategori --}}
+    <div id="category-list" class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm mt-8">
         @foreach ($categories as $category)
             <div class="flex items-center w-full justify-between p-8 gap-4">
                 <div class="flex items-center gap-4">
-                    <img src="{{ asset('assets/images/photos/category-course.png') }}" alt="Thumbnail Course"
+                    <img src="{{ asset('assets/images/photos/category-course.png') }}" alt="Thumbnail"
                         class="w-16 h-auto rounded-full">
                     <div class="flex flex-col w-full max-w-xs">
                         <h1 class="text-xl font-semibold break-words text-left">{{ $category->name }}</h1>
@@ -58,26 +63,31 @@
             </div>
         @endforeach
     </div>
+
+    {{-- Script --}}
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        document.querySelectorAll('.delete-category-form').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault(); // stop submit
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "Category will be deleted permanently!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#d33',
-                    cancelButtonColor: '#3085d6',
-                    confirmButtonText: 'Yes, delete it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        form.submit();
-                    }
+        function attachDeleteSwal() {
+            document.querySelectorAll('.delete-category-form').forEach(form => {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "Category will be deleted permanently!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            form.submit();
+                        }
+                    });
                 });
             });
-        });
+        }
+        attachDeleteSwal();        
     </script>
+    <script src="{{ asset('js/admin-category-search.js') }}"></script>
 @endsection

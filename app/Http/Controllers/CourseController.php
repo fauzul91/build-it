@@ -289,4 +289,22 @@ class CourseController extends Controller
             'completed' => true,
         ]);
     }
+    public function searchActiveCourse(Request $request)
+    {
+        $q = $request->query('q');
+        $courses = Course::with('category')
+            ->where('name', 'like', '%' . $q . '%')
+            ->where('status', 'approved')
+            ->get()
+            ->map(function ($course) {
+                return [
+                    'id' => $course->id,
+                    'name' => $course->name,
+                    'thumbnail' => $course->thumbnail,
+                    'category_name' => $course->category->name ?? 'Kategori',
+                ];
+            });
+
+        return response()->json($courses);
+    }
 }

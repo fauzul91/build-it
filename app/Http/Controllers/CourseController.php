@@ -253,19 +253,24 @@ class CourseController extends Controller
             ->pluck('course_video_id');
 
         $isCurrentVideoCompleted = $completedVideos->contains($video->id);
-
+        $completedCount = $completedVideos->count();
+        $totalVideos = $course->videos->count();
+        $percentage = $totalVideos > 0 ? round(($completedCount / $totalVideos) * 100) : 0;
         return view('student.my-courses.show', compact(
             'course',
             'completedVideos',
-            'isCurrentVideoCompleted'
+            'isCurrentVideoCompleted',
+            'completedCount',
+            'totalVideos',
+            'percentage'
         ))->with([
                     'currentVideo' => $video
                 ]);
     }
 
-    public function markCompleted(CourseVideo $video)
+    public function markCompleted(Request $request, CourseVideo $video)
     {
-        CourseProgress::updateOrCreate(
+        $progress = CourseProgress::updateOrCreate(
             [
                 'user_id' => auth()->id(),
                 'course_id' => $video->course_id,
@@ -277,6 +282,11 @@ class CourseController extends Controller
             ]
         );
 
-        return back()->with('success', 'Video ditandai sebagai selesai.');
+        return response()->json([
+            'message' => 'Video ditandai sebagai selesai.',
+            'video_id' => $video->id,
+            'course_id' => $video->course_id,
+            'completed' => true,
+        ]);
     }
 }

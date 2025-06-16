@@ -8,7 +8,7 @@
     <div class="mt-8">
         @if ($course && $course->videos && $course->videos->count() > 0)
             <h2 class="text-md font-bold text-font mb-4">{{ $course->name }}</h2>
-            <ul id="video-list">
+            <ul id="video-list" class="list-none">
                 @foreach ($course->videos as $index => $video)
                     <li>
                         <button type="button"
@@ -16,7 +16,7 @@
                                 transition bg-light-grey text-font hover:bg-primary hover:text-white
                                 @if ($index === 0) font-bold text-white bg-primary hover:opacity-90 hover:text-white @endif"
                             data-title="{{ $video->title }}" data-youtube-id="{{ $video->youtube_id }}">
-                            &gt; {{ $video->title }}
+                            {{ $video->title }}
                         </button>
                     </li>
                 @endforeach
@@ -36,7 +36,7 @@
         @if ($firstVideo)
             <h2 id="video-title" class="text-xl font-bold mb-4">{{ $firstVideo->title }}</h2>
 
-            <div class="w-full h-[75vh] rounded">
+            <div class="w-full h-[70vh] rounded">
                 <iframe id="video-iframe" class="w-full h-full rounded"
                     src="https://www.youtube.com/embed/{{ $firstVideo->youtube_id }}" title="{{ $firstVideo->title }}"
                     frameborder="0"

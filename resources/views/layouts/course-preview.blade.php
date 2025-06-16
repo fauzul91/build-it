@@ -29,17 +29,13 @@
 <body class="font-family-sans flex flex-col bg-gray-50">
     <div class="flex h-screen">
         <aside class="w-64 bg-white shadow-md px-6 py-8 flex flex-col">
-            <!-- Navigation -->
             <nav class="flex flex-col">
-                {{-- Back to Dashboard --}}
-                <a href="{{ route('dashboard') }}" class="text-font hover:shadow-sm text-md">Back to dashboard</a>
+                <a href="{{  url()->previous() }}" class="text-font hover:shadow-sm text-md">Kembali</a>
                 @yield('course-video')
             </nav>
         </aside>
 
-        <!-- Main Content -->
         <main class="flex-1 overflow-y-auto bg-light-blue">
-            <!-- Top Bar -->
             <div class="px-8 py-6 flex justify-between items-center sticky top-0 z-10 bg-white">
                 <div class="w-1/2">
                     <div class="relative">

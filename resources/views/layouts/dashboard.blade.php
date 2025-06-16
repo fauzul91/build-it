@@ -157,9 +157,7 @@
             </nav>
         </aside>
 
-        <!-- Main Content -->
-        <main class="flex-1 overflow-y-auto bg-light-blue">
-            <!-- Top Bar -->
+        <main class="flex-1 overflow-y-auto bg-[#FAFBFF]">
             <div class="px-8 py-6 flex justify-between items-center sticky top-0 z-10 bg-white">
                 <div class="w-1/2">
                     <div class="relative">

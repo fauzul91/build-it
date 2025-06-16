@@ -12,6 +12,8 @@ class Transaction extends Model
         'course_id',
         'amount',
         'status',
+        'platform_fee',
+        'tutor_earning',
         'course_price',
         'payment_url',
     ];

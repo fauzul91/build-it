@@ -1,21 +1,32 @@
 @extends('layouts.course-watch')
 
 @section('course-video')
-    <div class="mt-8">
+    <a href="{{ route('student.course') }}" class="text-font hover:shadow-sm text-md">Kembali</a>
+    <div class="mt-4">
         <h2 class="text-md font-bold text-font mb-4">{{ $course->name }}</h2>
+        <div class="mb-4">
+            <div class="mb-2 text-sm font-medium text-font">
+                Progress: {{ $completedCount }} dari {{ $totalVideos }} video ({{ $percentage }}%)
+            </div>
+            <div class="w-full bg-gray-200 rounded-full h-2">
+                <div class="bg-primary h-2 rounded-full" style="width: {{ $percentage }}%"></div>
+            </div>
+        </div>
         <ul id="video-list">
             @foreach ($course->videos as $video)
                 @php
                     $isCompleted = $completedVideos->contains($video->id);
                 @endphp
                 <li>
-                    <a href="{{ route('student.course.show', $course->slug) }}?v={{ $video->id }}"
-                        class="block w-full text-left text-sm cursor-pointer px-6 py-3 mb-2 rounded-full transition
-                            {{ $video->id == $currentVideo->id 
-                                ? 'bg-primary text-white font-bold' 
-                                : 'bg-light-grey text-font hover:bg-primary hover:text-white' }}">
+                    <button type="button"
+                        class="video-link block w-full text-left text-sm cursor-pointer px-6 py-3 mb-2 rounded-full transition
+                    {{ $video->id == $currentVideo->id
+                        ? 'bg-primary text-white font-bold'
+                        : 'bg-light-grey text-font hover:bg-primary hover:text-white' }}"
+                        data-id="{{ $video->id }}" data-title="{{ $video->title }}"
+                        data-youtube-id="{{ $video->youtube_id }}" data-completed="{{ $isCompleted ? 'yes' : 'no' }}">
                         {{ $isCompleted ? '✔️' : '▶️' }} {{ $video->title }}
-                    </a>
+                    </button>
                 </li>
             @endforeach
         </ul>
@@ -26,27 +37,103 @@
     <div class="p-6 bg-white rounded shadow">
         <h2 class="text-xl font-bold mb-4">{{ $currentVideo->title }}</h2>
 
-        <div class="w-full h-[75vh] rounded mb-6">
-            <iframe class="w-full h-full rounded"
-                src="https://www.youtube.com/embed/{{ $currentVideo->youtube_id }}"
+        <div class="w-full h-[70vh] rounded mb-6">
+            <iframe class="w-full h-full rounded" src="https://www.youtube.com/embed/{{ $currentVideo->youtube_id }}"
                 title="{{ $currentVideo->title }}" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowfullscreen>
             </iframe>
         </div>
 
-        @if (!$isCurrentVideoCompleted)
-            <form action="{{ route('student.course.progress', $currentVideo->id) }}" method="POST">
-                @csrf
-                <button type="submit"
-                    class="bg-green-600 hover:bg-green-700 text-white px-5 py-3 rounded-lg font-semibold">
-                    Tandai Selesai ✅
+        <div id="completion-status" class="text-right">
+            @if (!$isCurrentVideoCompleted)
+                <button id="mark-complete-button" data-id="{{ $currentVideo->id }}"
+                    class="bg-primary hover:opacity-90 cursor-pointer text-white px-6 py-4 rounded-full font-semibold">
+                    Tandai Selesai
                 </button>
-            </form>
-        @else
-            <span class="inline-block bg-green-100 text-green-700 px-4 py-2 rounded">
-                Video ini telah ditandai selesai ✔️
-            </span>
-        @endif
+            @else
+                <span
+                    class="inline-block bg-black hover:bg-gray-600 cursor-pointer text-white px-6 py-4 rounded-full font-semibold">
+                    Video ini telah ditandai selesai
+                </span>
+            @endif
+        </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoLinks = document.querySelectorAll('.video-link');
+            const iframe = document.querySelector('iframe');
+            const videoTitle = document.querySelector('h2.text-xl');
+            const completionStatus = document.getElementById('completion-status');
+
+            videoLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    const title = this.dataset.title;
+                    const youtubeId = this.dataset.youtubeId;
+                    const completed = this.dataset.completed;
+                    const videoId = this.dataset.id;
+
+                    // Ganti isi iframe dan judul
+                    iframe.src = `https://www.youtube.com/embed/${youtubeId}`;
+                    videoTitle.textContent = title;
+
+                    // Tandai aktif di list
+                    videoLinks.forEach(l => {
+                        l.classList.remove('bg-primary', 'text-white', 'font-bold');
+                        l.classList.add('bg-light-grey', 'text-font');
+                    });
+                    this.classList.add('bg-primary', 'text-white', 'font-bold');
+
+                    // Ganti status "Tandai Selesai"
+                    if (completionStatus) {
+                        if (completed === 'yes') {
+                            completionStatus.innerHTML = `
+                        <span class="inline-block bg-black text-white px-6 py-4 rounded-full font-semibold">
+                            Video ini telah ditandai selesai
+                        </span>
+                    `;
+                        } else {
+                            completionStatus.innerHTML = `
+                        <button id="mark-complete-button"
+                            class="bg-primary hover:opacity-90 cursor-pointer text-white px-6 py-4 rounded-full font-semibold"
+                            data-id="${videoId}">
+                            Tandai Selesai
+                        </button>
+                    `;
+
+                            document.getElementById('mark-complete-button').addEventListener(
+                                'click',
+                                function() {
+                                    const id = this.dataset.id;
+                                    fetch(`/kelas-saya/progress/${id}`, {
+                                        method: 'POST',
+                                        headers: {
+                                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                                            'Content-Type': 'application/json',
+                                            'Accept': 'application/json'
+                                        }
+                                    }).then(res => {
+                                        if (!res.ok) throw new Error(
+                                            'Gagal menandai selesai');
+                                        return res.json();
+                                    }).then(() => {
+                                        // Ganti tombol jadi text
+                                        completionStatus.innerHTML = `
+                                <span class="inline-block bg-black text-white px-6 py-4 rounded-full font-semibold">
+                                    Video ini telah ditandai selesai
+                                </span>
+                            `;
+                                        // Update icon di daftar video
+                                        const icon = '✔️';
+                                        this.dataset.completed = 'yes';
+                                        link.innerHTML = `${icon} ${title}`;
+                                        link.dataset.completed = 'yes';
+                                    }).catch(err => alert(err.message));
+                                });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
 @endsection

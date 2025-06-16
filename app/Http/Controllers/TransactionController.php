@@ -92,16 +92,26 @@ class TransactionController extends Controller
         $course = Course::where('slug', $slug)->firstOrFail();
         $user = auth()->user();
 
-        $orderId = 'ORDER-' . uniqid() . '-' . time();
-        $transaction = Transaction::create([
-            'user_id' => $user->id,
-            'course_id' => $course->id,
-            'course_price' => $course->price,
-            'amount' => $course->price,
-            'status' => 'completed',
-            'payment_url' => null,
-            'midtrans_order_id' => $orderId,
-        ]);
+        if ($course->price == 0) {
+            $transaction = Transaction::create([
+                'user_id' => $user->id,
+                'course_id' => $course->id,
+                'course_price' => 0,
+                'amount' => 0,
+                'platform_fee' => 0,
+                'tutor_earning' => 0,
+                'status' => 'completed',
+                'payment_url' => null,
+            ]);
+
+            return redirect()->route('student.course')->with('success', 'Kamu telah berhasil mengambil course gratis.');
+        }
+
+        $price = $course->price;
+        $platformFee = $price * 0.2;
+        $tutorEarning = $price - $platformFee;
+
+        $orderId = 'ORDER-' . uniqid();
 
         Config::$serverKey = config('midtrans.server_key');
         Config::$isProduction = config('midtrans.is_production');
@@ -128,6 +138,18 @@ class TransactionController extends Controller
         ];
 
         $snapToken = Snap::getSnapToken($midtransParams);
+        $paymentUrl = 'https://app.sandbox.midtrans.com/snap/v2/vtweb/' . $snapToken;
+
+        $transaction = Transaction::create([
+            'user_id' => $user->id,
+            'course_id' => $course->id,
+            'course_price' => $course->price,
+            'amount' => $course->price,
+            'platform_fee' => $platformFee,
+            'tutor_earning' => $tutorEarning,
+            'status' => 'completed',
+            'payment_url' => $paymentUrl,
+        ]);
 
         return view('order.payment', compact('snapToken', 'course'));
     }

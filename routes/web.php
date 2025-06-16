@@ -32,21 +32,23 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+    Route::get('/settings', [AccountController::class, 'index'])->name('settings');
+    Route::post('/settings/profile', [AccountController::class, 'updateProfile'])->name('settings.profile.update');
+    Route::post('/settings/password', [AccountController::class, 'updatePassword'])->name('settings.password.update');
+});
+
+Route::middleware(['auth', 'role:student'])->group(function () {
     Route::get('/profile', [AccountController::class, 'studentProfile'])->name('student.profile');
     Route::get('/kelas-saya', [CourseController::class, 'studentCourse'])->name('student.course');
     Route::get('/kelas-saya/{slug}', [CourseController::class, 'studentVideo'])->name('student.course.show');
     Route::post('/kelas-saya/progress/{video}', [CourseController::class, 'markCompleted'])->name('student.course.progress');
     Route::get('/transaksi-saya', [TransactionController::class, 'studentTransaction'])->name('student.transaction');
     Route::get('/transaksi-saya/{id}', [TransactionController::class, 'studentDetail'])->name('student.transaction.show');
-    Route::get('/settings', [AccountController::class, 'index'])->name('settings');
-    Route::post('/settings/profile', [AccountController::class, 'updateProfile'])->name('settings.profile.update');
-    Route::post('/settings/password', [AccountController::class, 'updatePassword'])->name('settings.password.update');
     Route::get('/kelas/{slug}/order', [TransactionController::class, 'showOrder'])->name('order.index');
     Route::post('/kelas/{slug}/checkout', [TransactionController::class, 'checkout'])->name('order.checkout');
-    Route::get('/dashboard', fn() => view('dashboard.index'))->name('dashboard');
 });
 
-Route::prefix('tutor')->middleware('auth')->group(function () {
+Route::prefix('tutor')->middleware(['auth', 'role:tutor'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'tutorDashboard'])->name('tutor.dashboard');
     Route::get('/transactions', [TransactionController::class, 'tutorTransaction'])->name('tutor.transaction');
     Route::get('/transactions/{id}', [TransactionController::class, 'tutorTransactionShow'])->name('tutor.transaction.show');
@@ -61,7 +63,7 @@ Route::prefix('tutor')->middleware('auth')->group(function () {
     Route::resource('courses', CourseController::class);
 });
 
-Route::prefix('admin')->middleware('auth')->group(function () {
+Route::prefix('admin')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('admin.dashboard');
     Route::get('/transactions', [TransactionController::class, 'adminTransaction'])->name('admin.transaction');
     Route::get('/transactions/{id}', [TransactionController::class, 'adminTransactionShow'])->name('admin.transaction.show');

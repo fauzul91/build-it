@@ -21,7 +21,7 @@
             </div>
         @endif
 
-        <div class="grid grid-cols-1 w-2/3 gap-8">
+        <div class="grid grid-cols-1 w-full gap-8">
             <!-- Profile Section -->
             <div class="bg-white rounded-xl shadow-sm p-8">
                 <h2 class="text-xl font-semibold mb-4">My Profile</h2>
@@ -93,7 +93,7 @@
         </div>
 
         <!-- WhatsApp Contact Section -->
-        <div class="mt-8 p-8 bg-primary text-white rounded-xl shadow-sm w-2/3">
+        <div class="mt-8 p-8 bg-primary text-white rounded-xl shadow-sm w-full">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24"

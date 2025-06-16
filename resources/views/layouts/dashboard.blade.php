@@ -38,19 +38,18 @@
                 <img src="{{ asset('assets/images/logos/build-it-logo.svg') }}" alt="BuildIT Logo" class="h-10">
             </div>
 
-            <!-- Navigation -->
             <nav class="flex flex-col">
                 <div class="mb-6">
                     <h3 class="text-xs font-semibold text-font uppercase tracking-wider mb-4 px-3">Main Menu</h3>
                     <ul class="flex flex-col gap-6">
-                        <li>
-                            <a href="{{ route('dashboard') }}"
-                                class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
-                                <i class="fas fa-home w-5 text-center text-font"></i>
-                                <span class="font-medium">Dashboard</span>
-                            </a>
-                        </li>
                         @role('tutor')
+                            <li>
+                                <a href="{{ route('tutor.dashboard') }}"
+                                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
+                                    <i class="fas fa-home w-5 text-center text-font"></i>
+                                    <span class="font-medium">Dashboard</span>
+                                </a>
+                            </li>
                             <li>
                                 <a href="{{ route('courses.index') }}"
                                     class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
@@ -65,8 +64,22 @@
                                     <span class="font-medium">Status Course</span>
                                 </a>
                             </li>
+                            <li>
+                                <a href="{{ route('tutor.transaction') }}"
+                                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
+                                    <i class="fas fa-receipt w-5 text-center text-font"></i>
+                                    <span class="font-medium">Transactions</span>
+                                </a>
+                            </li>
                         @endrole
                         @role('admin')
+                            <li>
+                                <a href="{{ route('admin.dashboard') }}"
+                                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
+                                    <i class="fas fa-home w-5 text-center text-font"></i>
+                                    <span class="font-medium">Dashboard</span>
+                                </a>
+                            </li>
                             <li>
                                 <a href="{{ route('categories.index') }}"
                                     class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
@@ -116,14 +129,14 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li>
+                                <a href="{{ route('admin.transaction') }}"
+                                    class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
+                                    <i class="fas fa-receipt w-5 text-center text-font"></i>
+                                    <span class="font-medium">Transactions</span>
+                                </a>
+                            </li>
                         @endrole
-                        <li>
-                            <a href="{{ route('transaction.index') }}"
-                                class="flex items-center gap-3 px-3 py-2 rounded-lg text-font hover:text-primary transition-colors">
-                                <i class="fas fa-receipt w-5 text-center text-font"></i>
-                                <span class="font-medium">Transactions</span>
-                            </a>
-                        </li>
                     </ul>
                 </div>
 

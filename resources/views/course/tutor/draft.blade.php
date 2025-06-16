@@ -5,15 +5,30 @@
 @endsection
 
 @section('content')
+    @if (!$verif || $verif->status !== 'approved')
+        <div class="bg-yellow-100 text-yellow-800 border border-yellow-300 px-4 py-3 rounded mb-6">
+            @if (!$verif)
+                Anda belum mengajukan verifikasi tutor.
+                <a href="{{ route('tutor.verif.form') }}" class="text-blue-600 underline">Ajukan sekarang.</a>
+            @elseif ($verif->status === 'pending')
+                Pengajuan verifikasi Anda sedang diproses. Mohon tunggu persetujuan admin.
+            @elseif ($verif->status === 'rejected')
+                Pengajuan verifikasi ditolak: <strong>{{ $verif->rejection_reason }}</strong>.
+                <a href="{{ route('tutor.verif.form') }}" class="text-blue-600 underline">Ajukan ulang.</a>
+            @endif
+        </div>
+    @endif
     <div class="flex items-center justify-between mb-8">
         <div class="flex flex-col">
             <h1 class="text-2xl font-bold mb-1.5">Draft Courses</h1>
             <p class="opacity-70">Buat kursus kamu di platform.</p>
         </div>
-        <a href="{{ route('courses.create') }}"
-            class="flex items-center px-6 py-3 text-white bg-primary rounded-full hover:opacity-90 transition-colors">
-            <span class="font-medium">New Course</span>
-        </a>
+        @if ($verif && $verif->status === 'approved')
+            <a href="{{ route('courses.create') }}"
+                class="flex items-center px-6 py-3 text-white bg-primary rounded-full hover:opacity-90 transition-colors">
+                <span class="font-medium">New Course</span>
+            </a>
+        @endif
     </div>
 
     <div class="flex flex-col items-center w-full bg-white rounded-2xl shadow-sm">

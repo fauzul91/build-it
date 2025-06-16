@@ -68,6 +68,6 @@ class TutorController extends Controller
             ]
         );
 
-        return redirect()->route('dashboard')->with('success', 'Verifikasi tutor berhasil, tunggu konfirmasi admin.');
+        return redirect()->route('tutor.dashboard')->with('success', 'Verifikasi tutor berhasil, tunggu konfirmasi admin.');
     }
 }

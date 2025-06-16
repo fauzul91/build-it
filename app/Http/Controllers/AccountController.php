@@ -14,6 +14,11 @@ class AccountController extends Controller
         $user = Auth::user();
         return view('setting.index', compact('user'));
     }
+    public function studentProfile()
+    {
+        $user = Auth::user();
+        return view('student.profile.index', compact('user'));
+    }   
 
     public function updateProfile(Request $request)
     {

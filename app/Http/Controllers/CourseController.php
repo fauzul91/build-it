@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Course;
 use App\Models\Category;
+use App\Models\TutorVerif;
+use App\Models\CourseVideo;
+use App\Models\Transaction;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\CourseProgress;
 
 class CourseController extends Controller
 {
@@ -24,10 +28,13 @@ class CourseController extends Controller
     public function index()
     {
         $tutorId = auth()->id();
+        $verif = TutorVerif::where('tutor_id', $tutorId)->first();
+
         $tutorDraftCourses = Course::where('tutor_id', $tutorId)
             ->where('status', 'draft')
             ->paginate(10);
-        return view('course.tutor.draft', compact('tutorDraftCourses'));
+
+        return view('course.tutor.draft', compact('tutorDraftCourses', 'verif'));
     }
     public function tutorStatusCourses()
     {
@@ -218,5 +225,58 @@ class CourseController extends Controller
         }
 
         return redirect()->back()->with('error', 'Course tidak bisa diajukan ulang.');
+    }
+    public function studentCourse()
+    {
+        $userId = auth()->id();
+        $courseIds = Transaction::where('user_id', $userId)
+            ->where('status', 'completed')
+            ->pluck('course_id');
+
+        $courses = Course::whereIn('id', $courseIds)->get();
+        return view('student.my-courses.index', compact('courses'));
+    }
+    public function studentVideo($slug)
+    {
+        $course = Course::with('videos')->where('slug', $slug)->firstOrFail();
+        $video = $course->videos()->first(); // ambil video pertama
+
+        if (!$video) {
+            return back()->with('error', 'Tidak ada video untuk course ini.');
+        }
+
+        $userId = auth()->id();
+
+        $completedVideos = CourseProgress::where('user_id', $userId)
+            ->where('course_id', $course->id)
+            ->where('is_completed', true)
+            ->pluck('course_video_id');
+
+        $isCurrentVideoCompleted = $completedVideos->contains($video->id);
+
+        return view('student.my-courses.show', compact(
+            'course',
+            'completedVideos',
+            'isCurrentVideoCompleted'
+        ))->with([
+                    'currentVideo' => $video
+                ]);
+    }
+
+    public function markCompleted(CourseVideo $video)
+    {
+        CourseProgress::updateOrCreate(
+            [
+                'user_id' => auth()->id(),
+                'course_id' => $video->course_id,
+                'course_video_id' => $video->id,
+            ],
+            [
+                'is_completed' => true,
+                'completed_at' => now(),
+            ]
+        );
+
+        return back()->with('success', 'Video ditandai sebagai selesai.');
     }
 }

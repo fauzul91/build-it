@@ -22,8 +22,13 @@
                     @endauth
                 </ul>
                 <div class="flex items-center gap-3">
-                    @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('tutor'))
-                        <a href="{{ route('dashboard') }}"
+                    @if (auth()->user()->hasRole('admin'))
+                        <a href="{{ route('admin.dashboard') }}"
+                            class="rounded-full py-3 px-5 bg-primary text-white font-semibold hover:drop-shadow-2xl transition-all duration-300">
+                            Dashboard
+                        </a>
+                    @elseif (auth()->user()->hasRole('tutor'))
+                        <a href="{{ route('tutor.dashboard') }}"
                             class="rounded-full py-3 px-5 bg-primary text-white font-semibold hover:drop-shadow-2xl transition-all duration-300">
                             Dashboard
                         </a>
@@ -48,11 +53,13 @@
                                 class="absolute top-full mt-2 right-0 bg-white shadow-md rounded-md w-[12.5rem] z-50">
                                 <ul class="py-2">
                                     <li>
-                                        <a href="{{ route('profile') }}"
-                                            class="block px-4 py-4 hover:bg-gray-100">Profile</a>
+                                        <a href="{{ route('student.course') }}" class="block px-4 py-4 hover:bg-gray-100">My Courses</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('profile') }}"
+                                        <a href="{{ route('student.transaction') }}" class="block px-4 py-4 hover:bg-gray-100">Transactions</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('student.profile') }}"
                                             class="block px-4 py-4 hover:bg-gray-100">Profile</a>
                                     </li>
                                     <li>
@@ -80,7 +87,7 @@
                         class="hover:font-semibold transition-all duration-300">Kelas</a>
                     <a href="{{ route('landing.tutor') }}" class="hover:font-semibold transition-all duration-300">Jadi
                         Tutor</a>
-                    
+
                 </div>
                 <div class="flex items-center gap-3">
                     <a href="{{ route('register') }}"

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use Midtrans\Snap;
 use Midtrans\Config;
 use App\Models\Course;
@@ -10,6 +11,66 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    public function studentTransaction()
+    {
+        $user = Auth::user();
+        $studentTrx = Transaction::where('user_id', $user->id)->get();
+
+        return view('student.transaction.index', compact('studentTrx'));
+    }
+    public function studentDetail($id)
+    {
+        $user = Auth::user();
+        $studentTrx = Transaction::where('id', $id)
+            ->where('user_id', $user->id)
+            ->with('course')
+            ->firstOrFail();
+
+        return view('student.transaction.show', compact('studentTrx'));
+    }
+    public function adminTransaction()
+    {
+        $transactions = Transaction::with(['course', 'user'])
+            ->latest()
+            ->paginate(5);
+
+        return view('transaction.admin.index', compact('transactions'));
+    }
+    public function tutorTransaction()
+    {
+        $tutorId = Auth::id();
+
+        $transactions = Transaction::with(['course', 'user'])
+            ->whereHas('course', function ($query) use ($tutorId) {
+                $query->where('tutor_id', $tutorId);
+            })
+            ->latest()
+            ->paginate(5);
+
+        return view('transaction.tutor.index', compact('transactions'));
+    }
+    public function tutorTransactionShow($id)
+    {
+        $tutorId = Auth::id();
+
+        $tutorTrx = Transaction::with('course')
+            ->where('id', $id)
+            ->whereHas('course', function ($query) use ($tutorId) {
+                $query->where('tutor_id', $tutorId);
+            })
+            ->firstOrFail();
+
+        return view('transaction.tutor.show', compact('tutorTrx'));
+    }
+    public function adminTransactionShow($id)
+    {
+        $user = Auth::user();
+        $adminTrx = Transaction::where('id', $id)
+            ->with('course')
+            ->firstOrFail();
+
+        return view('transaction.admin.show', compact('adminTrx'));
+    }
     public function showOrder($slug)
     {
         $course = Course::where('slug', $slug)->firstOrFail();

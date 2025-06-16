@@ -66,7 +66,7 @@ class AuthController extends Controller
             $user = Auth::user();
 
             if ($user->hasRole('admin')) {
-                return redirect('dashboard');
+                return redirect()->route('admin.dashboard');
             }
 
             if ($user->hasRole('student')) {
@@ -79,7 +79,7 @@ class AuthController extends Controller
                 if (!$tutorVerif) {
                     return redirect()->route('tutor.verif');
                 }
-                return redirect()->route('dashboard');
+                return redirect()->route('tutor.dashboard');
             }
         }
 
@@ -126,7 +126,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         if ($user->hasRole('admin')) {
-            return redirect()->route('dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         if ($user->hasRole('student')) {
@@ -141,7 +141,7 @@ class AuthController extends Controller
                     ->with('success', 'Silakan lengkapi verifikasi terlebih dahulu!');
             }
 
-            return redirect()->route('dashboard');
+            return redirect()->route('tutor.dashboard');
         }
 
         return redirect('/'); // fallback jika role tidak diketahui

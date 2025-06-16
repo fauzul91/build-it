@@ -9,7 +9,7 @@
                 <h1 class="text-2xl lg:text-3xl font-bold leading-tight mb-2">
                     {{ $course->name }}
                 </h1>
-                <p class="text-2xl font-medium opacity-50 mb-8">Rp {{ number_format($course->price, 0, ',', '.') }}</p>
+                <p class="text-xl font-medium opacity-50 mb-8">Rp {{ number_format($course->price, 0, ',', '.') }}</p>
                 <h3 class="text-lg font-semibold mb-2">Deskripsi</h3>
                 <p class="text-secondary opacity-80 text-base leading-relaxed">
                     {{ $course->description }}

@@ -1,4 +1,4 @@
-@extends('layouts.topbar')
+@extends('layouts.course-preview')
 
 @section('placeholder')
     Cari course terkini...
